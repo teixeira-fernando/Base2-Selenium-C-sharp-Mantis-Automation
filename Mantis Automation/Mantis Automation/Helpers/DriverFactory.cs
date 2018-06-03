@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using OpenQA.Selenium.PhantomJS;
 
 namespace Mantis_Automation.Helpers
 {
@@ -30,21 +31,41 @@ namespace Mantis_Automation.Helpers
             Instance = null;
         }
 
-        public static void Initialize(String browser)
+        public static void Initialize(string browser)
         {
             // If we are running against a remote webdriver.
             if (ConfigurationManager.AppSettings["RemoteChromeDriver"].Equals("true"))
             {
-                // Create the driver.
-                /*DesiredCapabilities capabilities = DesiredCapabilities.Chrome();
-                Uri uri = new Uri("http://localhost:4444");
 
-                // Create an event firing webdriver.
-                var firingDriver = new EventFiringWebDriver(new RemoteWebDriver(uri, capabilities));
-                firingDriver.ExceptionThrown += TakeScreenshotOnException;
-                */
+                if (browser.Equals("Firefox"))
+                {
+                    DesiredCapabilities capability = new DesiredCapabilities();
 
-                Instance = new RemoteWebDriver(new Uri("http://localhost:4444/wd/hub"), DesiredCapabilities.Firefox());
+                    FirefoxOptions options = new FirefoxOptions();
+                    options.BrowserExecutableLocation = "C:\\Program Files(x86)\\Mozilla Firefox\\firefox.exe";
+                    options.SetPreference("marionette", false);
+
+                    capability.SetCapability("name", "NUnit-CBT");
+                    capability.SetCapability("record_video", "true");
+                    capability.SetCapability("build", "1.0");
+                    capability.SetCapability("platform", "Windows 10");
+                    capability.SetCapability(FirefoxDriver.BinaryCapabilityName, "C:\\Program Files(x86)\\Mozilla Firefox\\firefox.exe");
+                    capability.SetCapability("browserName", "Firefox");
+                    Instance = new RemoteWebDriver(new Uri("http://localhost:4444/wd/hub"), capability);
+                    
+                }
+                else if (browser.Equals("Chrome"))
+                {
+                    Instance = new RemoteWebDriver(new Uri("http://localhost:4444/wd/hub"), DesiredCapabilities.Chrome());
+                }
+                else if (browser.Equals("InternetExplorer"))
+                {
+                    Instance = new RemoteWebDriver(new Uri("http://localhost:4444/wd/hub"), DesiredCapabilities.InternetExplorer());
+                }
+                else if (browser.Equals("PhamtomJS"))
+                {
+                    Instance = new RemoteWebDriver(new Uri("http://localhost:4444/wd/hub"), DesiredCapabilities.PhantomJS());
+                }
             }
             else
             {
@@ -54,18 +75,10 @@ namespace Mantis_Automation.Helpers
                     var driverService = FirefoxDriverService.CreateDefaultService();
                     driverService.FirefoxBinaryPath = "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe";
                     driverService.HideCommandPromptWindow = true;
-                    /*
-                     //Set up the Marionette capability
-                     DesiredCapabilities cap = new DesiredCapabilities();
-                     cap.SetCapability("marionette", true);
-
-                     // Create an event firing webdriver.
-                     var firingDriver = new EventFiringWebDriver(new FirefoxDriver(driverService, new FirefoxOptions(), TimeSpan.FromSeconds(180)));
-                     firingDriver.ExceptionThrown += TakeScreenshotOnException;
-
-                     Instance = firingDriver;*/
 
                     Instance = new FirefoxDriver(driverService);
+                    Instance.Manage().Window.Maximize();
+                    
                 }
                 else if (browser.Equals("Chrome"))
                 {
@@ -73,16 +86,10 @@ namespace Mantis_Automation.Helpers
                     var options = new ChromeOptions();
                     options.AddArgument("--start-maximized");
 
-                    // Set up the options.
-                    var service = ChromeDriverService.CreateDefaultService(System.AppDomain.CurrentDomain.BaseDirectory); //chromedriver precisa estar em bin/Debug do projeto de teste
-                    service.LogPath = "chromedriver.log";
-                    service.HideCommandPromptWindow = true;
-                    service.EnableVerboseLogging = true;
-
                     // Create an event firing webdriver.
                     var firingDriver = new EventFiringWebDriver(new ChromeDriver(System.AppDomain.CurrentDomain.BaseDirectory, options, TimeSpan.FromSeconds(180)));
 
-                    Instance = firingDriver;
+                    Instance = firingDriver;                  
                 }
                 else if (browser.Equals("Opera"))
                 {
@@ -95,7 +102,7 @@ namespace Mantis_Automation.Helpers
                 {
                     var options = new InternetExplorerOptions()
                     {
-                        InitialBrowserUrl = ConfigurationManager.AppSettings["BaseUrl"],
+                       // InitialBrowserUrl = ConfigurationManager.AppSettings["BaseUrl"],
                         IntroduceInstabilityByIgnoringProtectedModeSettings = true,
                         IgnoreZoomLevel = true,
                         EnableNativeEvents = false,
@@ -103,16 +110,22 @@ namespace Mantis_Automation.Helpers
                     };
                     Instance = new InternetExplorerDriver(options);
                 }
-
-                double implicitlyWait = Convert.ToDouble(ConfigurationManager.AppSettings["DefaultImplicitlyWait"]);
-                Instance.Manage().Timeouts().ImplicitWait = (TimeSpan.FromSeconds(implicitlyWait));
-
-                double pageLoadTimeout = Convert.ToDouble(ConfigurationManager.AppSettings["PageLoadTimeout"]);
-                Instance.Manage().Timeouts().PageLoad = (TimeSpan.FromSeconds(pageLoadTimeout));
+                else if (browser.Equals("PhamtomJS"))
+                {                  
+                    Instance = new PhantomJSDriver();
+                }
             }
 
             // Initialize base URL
             BaseUrl = ConfigurationManager.AppSettings["BaseURL"];
+
+            Instance.Navigate().GoToUrl(BaseUrl);
+
+            double implicitlyWait = Convert.ToDouble(ConfigurationManager.AppSettings["DefaultImplicitlyWait"]);
+            Instance.Manage().Timeouts().ImplicitWait = (TimeSpan.FromSeconds(implicitlyWait));
+
+            double pageLoadTimeout = Convert.ToDouble(ConfigurationManager.AppSettings["PageLoadTimeout"]);
+            Instance.Manage().Timeouts().PageLoad = (TimeSpan.FromSeconds(pageLoadTimeout));
         }
 
         private static FirefoxProfile CreateFirefoxProfile()

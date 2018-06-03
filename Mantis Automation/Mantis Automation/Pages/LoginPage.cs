@@ -33,13 +33,31 @@ namespace Mantis_Automation.Pages
         protected IWebElement UserNameField { get; set; }
 
         [FindsBy(How = How.Name, Using = "password")]
-        protected IWebElement TitleMessageToUser { get; set; }
+        protected IWebElement PasswordField { get; set; }
 
-        [FindsBy(How = How.Id, Using = "new_task")]
-        protected IWebElement TaskNameField { get; set; }
+        [FindsBy(How = How.ClassName, Using = "button")]
+        protected IWebElement LoginButton { get; set; }
 
 
         #endregion
 
+        #region Methods
+
+        public void fillUsernameField(string username)
+        {
+            UserNameField.SendKeys(username);
+        }
+
+        public void fillPasswordField(string password)
+        {
+            PasswordField.SendKeys(password);
+        }
+
+        public void clickOnLoginButton()
+        {
+            LoginButton.Click();
+        }
+
+        #endregion
     }
 }
