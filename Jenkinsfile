@@ -25,7 +25,7 @@ pipeline {
   post {
         always {
             archiveArtifacts "Mantis Automation/bin/Debug/**"
-            junit "**/TestResult.xml"
+            nunit testResultsPattern: 'TestResult.xml'
         }
     }
 }
