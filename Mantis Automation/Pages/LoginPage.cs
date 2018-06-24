@@ -19,12 +19,12 @@ namespace Mantis_Automation.Pages
         IWebDriver driver = null;
         #endregion
 
-        public LoginPage()
+        public LoginPage(IWebDriver driverReference)
         {
-            PageFactory.InitElements(DriverFactory.Instance, this);
+            driver = driverReference;
+            PageFactory.InitElements(driver, this);
             waitComponent = Convert.ToInt16(ConfigurationManager.AppSettings["ComponentTimeout"]);
-            wait = new WebDriverWait(DriverFactory.Instance, TimeSpan.FromSeconds(waitComponent));
-            driver = DriverFactory.Instance;
+            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(waitComponent));
         }
 
         #region Web Elements

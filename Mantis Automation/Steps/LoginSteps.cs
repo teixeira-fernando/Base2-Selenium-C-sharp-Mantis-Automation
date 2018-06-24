@@ -1,4 +1,5 @@
 ﻿using Mantis_Automation.Pages;
+using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace Mantis_Automation.Steps
     {
         private LoginPage loginPage;
 
-        public LoginSteps()
+        public LoginSteps(IWebDriver driverReference)
         {
-            loginPage = new LoginPage();
+            loginPage = new LoginPage(driverReference);
         }
 
         public void doLogin(string username, string password)

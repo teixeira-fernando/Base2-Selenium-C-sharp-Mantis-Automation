@@ -28,7 +28,7 @@ namespace Mantis_Automation.Tests
         public void testLogin(ArrayList dadosTeste)
         {
             #region Instância de paginas e steps
-            loginSteps = new LoginSteps();
+            loginSteps = new LoginSteps(driver);
             loginSteps.doLogin(dadosTeste[0].ToString(),dadosTeste[1].ToString());
             #endregion
 
