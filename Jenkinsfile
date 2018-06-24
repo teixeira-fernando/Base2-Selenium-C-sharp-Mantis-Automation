@@ -8,7 +8,7 @@ pipeline {
     }
      stage('Restore Nuget') {
       steps {
-        bat '"C:/tools/nuget.exe" restore'
+        bat '"C:\\JenkinsTools\\NuGet.exe" restore '
       }
      }
       stage('Build') {
