@@ -18,7 +18,7 @@ pipeline {
       }
       stage('Tests') {
       steps {   
-        bat 'C:/JenkinsTools/tools/nunit3-console.exe "Mantis Automation\bin\Debug\Mantis Automation.dll"'
+        bat 'C:/JenkinsTools/tools/nunit3-console.exe "Mantis Automation/bin/Debug/Mantis Automation.dll"'
       }
       }
   }
