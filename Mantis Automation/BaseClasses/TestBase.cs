@@ -46,7 +46,7 @@ namespace Mantis_Automation.BaseClasses
             if (NUnit.Framework.TestContext.CurrentContext.Result.FailCount > 0)
             {
                 string nomeArquivo = TakeScreenshotsHelper.TakeScreenshotOnException(driver, NUnit.Framework.TestContext.CurrentContext.Test.MethodName);
-                NUnit.Framework.TestContext.AddTestAttachment(System.AppDomain.CurrentDomain.BaseDirectory + "../../Resources/Screenshots/" + nomeArquivo, "evidência da tela onde o erro ocorreu!");
+                NUnit.Framework.TestContext.AddTestAttachment(System.AppDomain.CurrentDomain.BaseDirectory + "Screenshots/" + nomeArquivo, "evidência da tela onde o erro ocorreu!");
             }
             driver.Quit();
         }
