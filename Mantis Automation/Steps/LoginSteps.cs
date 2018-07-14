@@ -10,7 +10,7 @@ namespace Mantis_Automation.Steps
 {
     public class LoginSteps
     {
-        private LoginPage loginPage;
+        public LoginPage loginPage;
 
         public LoginSteps(IWebDriver driverReference)
         {

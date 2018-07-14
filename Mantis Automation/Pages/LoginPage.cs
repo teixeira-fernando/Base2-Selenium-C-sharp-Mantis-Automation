@@ -54,7 +54,7 @@ namespace Mantis_Automation.Pages
         public void clickOnLoginButton()
         {
             wait.Until(WaitHelper.ElementIsVisible(LoginButton));
-            //LoginButton.Click();
+            LoginButton.Click();
         }
 
         #endregion

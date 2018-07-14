@@ -24,5 +24,37 @@ namespace Mantis_Automation.Helpers
                 }
             };
         }
+
+        public static Func<IWebDriver, bool> ElementExists(IWebElement element)
+        {
+            return (driver) =>
+            {
+                try
+                {
+                    return element.Enabled;
+                }
+                catch (Exception)
+                {
+                    // If element is null, stale or if it cannot be located
+                    return false;
+                }
+            };
+        }
+
+        public static Func<IWebDriver, bool> URLToBeDiffent(string URL)
+        {
+            return (driver) =>
+            {
+                try
+                {
+                    return !driver.Url.Equals(URL);
+                }
+                catch (Exception)
+                {
+                    // If element is null, stale or if it cannot be located
+                    return false;
+                }
+            };
+        }
     }
 }

@@ -19,6 +19,7 @@ namespace Mantis_Automation.Tests
         LoginSteps loginSteps = null;
         MyViewSteps myViewSteps = null;
         ReportIssueSteps reportIssueSteps = null;
+        ViewIssuesSteps viewIssuesSteps = null;
         #endregion
 
         #region Data driven provider
@@ -52,9 +53,9 @@ namespace Mantis_Automation.Tests
             myViewSteps.myViewPage.ClickOnReportIssueLink();
             #endregion
 
-            reportIssueSteps.createNewReport(dadosTeste[2].ToString(), dadosTeste[3].ToString(), dadosTeste[4].ToString());
+            reportIssueSteps.createNewReport(dadosTeste[2].ToString(), dadosTeste[3].ToString(), dadosTeste[4].ToString(), dadosTeste[5].ToString());
 
-            NUnit.Framework.Assert.IsTrue(myViewSteps.myViewPage.Is_LoggedInUserLabel_Visible());
+            NUnit.Framework.Assert.IsTrue(reportIssueSteps.reportIssue.verify_ReportIssueResultMessage("Operation successful."));
         }
     }
 }

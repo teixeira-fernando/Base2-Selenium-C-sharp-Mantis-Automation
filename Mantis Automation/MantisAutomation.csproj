@@ -88,9 +88,11 @@
     <Compile Include="Pages\ReportIssuePage.cs" />
     <Compile Include="Pages\LoginPage.cs" />
     <Compile Include="Pages\MyViewPage.cs" />
+    <Compile Include="Pages\ViewIssuesPage.cs" />
     <Compile Include="Steps\LoginSteps.cs" />
     <Compile Include="Steps\MyViewSteps.cs" />
     <Compile Include="Steps\ReportIssueSteps.cs" />
+    <Compile Include="Steps\ViewIssuesSteps.cs" />
     <Compile Include="Tests\Test_Login.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\Test_MyView.cs" />

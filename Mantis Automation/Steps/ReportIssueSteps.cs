@@ -10,21 +10,35 @@ namespace Mantis_Automation.Steps
 {
     public class ReportIssueSteps
     {
-        private ReportIssuePage reportIssue;
+        public ReportIssuePage reportIssue;
 
         public ReportIssueSteps(IWebDriver driverReference)
         {
             reportIssue = new ReportIssuePage(driverReference);
         }
 
-        public void createNewReport(string project, string category, string summary)
+        public void createNewReport(string project, string category, string summary, string description)
         {
             if (reportIssue.isFormTitleVisible()) { 
                 reportIssue.selectProject(project);
                 reportIssue.clickSelectProjectButton();
             }
             reportIssue.selectCategory(category);
-            reportIssue.setSummaryValue(summary);
+            reportIssue.fillSummaryField(summary);
+            reportIssue.fillDescriptionField(description);
+            reportIssue.clickSubmitReportButton();
+        }
+
+        public void createNewReport_CheckDescriptionObrigatory(string project, string category, string summary, string description)
+        {
+            if (reportIssue.isFormTitleVisible())
+            {
+                reportIssue.selectProject(project);
+                reportIssue.clickSelectProjectButton();
+            }
+            reportIssue.selectCategory(category);
+            reportIssue.fillSummaryField(summary);
+            reportIssue.fillDescriptionField(description);
             reportIssue.clickSubmitReportButton();
         }
     }

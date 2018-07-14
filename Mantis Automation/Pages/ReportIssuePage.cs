@@ -1,5 +1,6 @@
 ﻿using Mantis_Automation.Helpers;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.PageObjects;
 using OpenQA.Selenium.Support.UI;
 using System;
@@ -41,13 +42,25 @@ namespace Mantis_Automation.Pages
         protected IWebElement CategoryComboBox => driver.FindElement(By.Name("category_id"));
         protected IWebElement SummaryTextField => driver.FindElement(By.Name("summary"));
         protected IWebElement DescriptionTextField => driver.FindElement(By.Name("description"));
-        protected IWebElement SubmitReportButton => driver.FindElement(By.XPath("/html/body/div[2]/form/table/tbody/tr[16]/td[2]/input"));
+        protected IWebElement SubmitReportButton => driver.FindElement(By.CssSelector("input[value='Submit Report']"));
+
+        #endregion
+
+        #region Report Result
+
+        protected IWebElement ReportIssueResult => driver.FindElement(By.XPath("/html/body/div[2]"));
 
         #endregion
 
         #endregion
 
         #region Methods
+
+        public bool verify_ReportIssueResultMessage(string message)
+        {
+            wait.Until(WaitHelper.URLToBeDiffent("http://mantis-prova.base2.com.br/bug_report_page.php"));
+            return ReportIssueResult.Text.Contains(message);
+        }
 
         public bool isFormTitleVisible()
         {
@@ -74,15 +87,24 @@ namespace Mantis_Automation.Pages
             selectElement.SelectByText(category);
         }
 
-        public void setSummaryValue(string summary)
+        public void fillSummaryField(string summary)
         {
             wait.Until(WaitHelper.ElementIsVisible(SummaryTextField));
             SummaryTextField.SendKeys(summary);
         }
 
+        public void fillDescriptionField(string description)
+        {
+            wait.Until(WaitHelper.ElementIsVisible(DescriptionTextField));
+            DescriptionTextField.SendKeys(description);
+        }
+
         public void clickSubmitReportButton()
         {
             wait.Until(WaitHelper.ElementIsVisible(SubmitReportButton));
+            Actions actions = new Actions(driver);
+            actions.MoveToElement(SubmitReportButton);
+            actions.Perform();
             SubmitReportButton.Click();
         }
 
