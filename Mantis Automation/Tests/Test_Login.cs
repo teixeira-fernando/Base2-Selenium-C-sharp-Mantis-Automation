@@ -13,6 +13,7 @@ namespace Mantis_Automation.Tests
 
         #region Objetos de página e steps
         LoginSteps loginSteps = null;
+        MyViewSteps myViewSteps = null;
         #endregion
 
         #region Data driven provider
@@ -21,41 +22,47 @@ namespace Mantis_Automation.Tests
             return DataDrivenCSV.retornaDadosCSV(System.AppDomain.CurrentDomain.BaseDirectory
                 + "../../Resources/TestData/Login.csv", linha);
         }
+
+        public static IEnumerable loginDataProvider_Conjunto(int[] linha)
+        {
+
+            return DataDrivenCSV.retornaDadosCSV(System.AppDomain.CurrentDomain.BaseDirectory
+                + "../../Resources/TestData/Login.csv", linha);
+        }
+
         #endregion
 
         [Parallelizable]
         [TestMethod, TestCaseSource("loginDataProvider", new object[] { 1 })]
-        public void testLogin(ArrayList dadosTeste)
+        public void SuccessLogin(ArrayList dadosTeste)
         {
-            #region Instância de paginas e steps
+            #region Instância de steps
             loginSteps = new LoginSteps(driver);
-            loginSteps.doLogin(dadosTeste[0].ToString(),dadosTeste[1].ToString());
+            myViewSteps = new MyViewSteps(driver);
             #endregion
 
+            loginSteps.doLogin(dadosTeste[0].ToString(), dadosTeste[1].ToString());
+            NUnit.Framework.Assert.IsTrue(myViewSteps.myViewPage.Is_LoggedInUserLabel_Visible());
         }
 
-      
+        [Parallelizable]
+        [TestMethod, TestCaseSource("loginDataProvider_Conjunto", new object[] { new int[] { 2, 3, 4 } })]
+        public void FailLogin(ArrayList dadosTeste)
+        {
+            /*Case 1: Wrong password
+             * Case 2: Wrong username
+             * Case 3: Wrong password and username             
+             */
 
-        /*   #region Instância de paginas e steps
-           pesquisaMoedasCadastradasSteps = new PesquisaMoedasCadastradasSteps();
-           dbSteps = new DBSteps();
-           #endregion
+            #region Instância de steps
+            loginSteps = new LoginSteps(driver);
+            myViewSteps = new MyViewSteps(driver);
+            #endregion
 
-           #region Dados do teste
-           string codigoMoeda = dbSteps.retornaMoedasCadastrada(dadosTeste[0].ToString());
-           string status = dadosTeste[0].ToString();
-           #endregion
+            loginSteps.doLogin(dadosTeste[0].ToString(), dadosTeste[1].ToString());
+            NUnit.Framework.Assert.IsFalse(myViewSteps.myViewPage.Is_LoggedInUserLabel_Visible());
 
-           pesquisaMoedasCadastradasSteps.abrirPagina();
-           pesquisaMoedasCadastradasSteps.acessarMenuMoedas();
-           pesquisaMoedasCadastradasSteps.selecionarFiltroMoeda(codigoMoeda);
-           pesquisaMoedasCadastradasSteps.selecionarFiltroStatus(status);
-           pesquisaMoedasCadastradasSteps.acionarBotaoPesquisar();
-           string descricaoMoedaFiltro = pesquisaMoedasCadastradasSteps.lerValorSelecionadoFiltroMoeda();
-           string descricaoMoedaGrid = pesquisaMoedasCadastradasSteps.lerDescricaoMoedaGrid(descricaoMoedaFiltro);
-
-           //NUnit.Framework.Assert.AreEqual(descricaoMoedaFiltro, descricaoMoedaGrid);
-           */
+        }
 
     }
 }

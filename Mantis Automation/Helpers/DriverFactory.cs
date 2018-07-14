@@ -1,16 +1,12 @@
-﻿using System.Configuration;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Opera;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.Events;
-using OpenQA.Selenium.Support.Extensions;
 using System;
-using System.IO;
-using System.Threading;
-using OpenQA.Selenium.PhantomJS;
+using System.Configuration;
 
 namespace Mantis_Automation.Helpers
 {
@@ -35,7 +31,8 @@ namespace Mantis_Automation.Helpers
                 }
                 else if (browser.Equals("Chrome"))
                 {
-                    capability = DesiredCapabilities.Chrome();
+                    ChromeOptions options = new ChromeOptions();
+                    capability.SetCapability(ChromeOptions.Capability, options);
                 }
                 else if (browser.Equals("InternetExplorer"))
                 {
@@ -90,10 +87,6 @@ namespace Mantis_Automation.Helpers
                     };
                     Instance = new InternetExplorerDriver(options);
                 }
-                else if (browser.Equals("PhamtomJS"))
-                {                  
-                    Instance = new PhantomJSDriver();
-                }
             }
 
             // Initialize base URL
@@ -110,81 +103,6 @@ namespace Mantis_Automation.Helpers
             return Instance;
         }
 
-        private static FirefoxProfile CreateFirefoxProfile()
-        {
-            var firefoxProfile = new FirefoxProfile();
-            //firefoxProfile.SetPreference("network.automatic-ntlm-auth.trusted-uris", "http://localhost");
-            return firefoxProfile;
-        }
-
-        /// <summary>
-        /// Take a screen shot everytime Selenium has an exception
-        /// </summary>
-        /// <param name="sender">Sender.</param>
-        /// <param name="e">Exception.</param>
-        private static void TakeScreenshotOnException(IWebDriver driver, object sender, WebDriverExceptionEventArgs e)
-        {
-            // Find all existing  screenshot files for this module.
-            using (var ms = new MemoryStream())
-            {
-
-                string searchTerm = String.Format("{0}*.png", "");
-                var files = Directory.EnumerateFiles(System.AppDomain.CurrentDomain.BaseDirectory + @"\Screenshots_Errors\", searchTerm);
-
-                // Delete files.
-                foreach (string fileName in files)
-                {
-                    try
-                    {
-                        File.Delete(fileName);
-                    }
-                    catch (IOException)
-                    {
-                        // Wait a bit then try again.
-                        Thread.Sleep(1000);
-                        File.Delete(fileName);
-                    }
-                }
-
-                // Create a new one with the latest exception.
-                string timestamp = DateTime.Now.ToString("yyyy-MM-dd-hhmm-ss");
-                driver.TakeScreenshot().SaveAsFile(System.AppDomain.CurrentDomain.BaseDirectory + @"\Screenshots_Errors\" + e.ThrownException.StackTrace[0].ToString() + "   " + timestamp + ".png");
-            }
-        }
-
-        public static string TakeScreenshotOnException(IWebDriver driver, string methodName)
-        {
-
-            using (var ms = new MemoryStream())
-            {
-
-                /*string searchTerm = String.Format("{0}*.png", "");
-                var files = Directory.EnumerateFiles(System.AppDomain.CurrentDomain.BaseDirectory + @"\Screenshots_Errors\", searchTerm);
-
-                // Delete files.
-                foreach (string fileName in files)
-                {
-                    try
-                    {
-                        if (fileName.Contains(methodName))
-                        {
-                            File.Delete(fileName);
-                        }
-                    }
-                    catch (IOException)
-                    {
-                        // Wait a bit then try again.
-                        Thread.Sleep(1000);
-                        File.Delete(fileName);
-                    }
-                }*/
-
-                // Create a new one with the latest exception.
-                string timestamp = DateTime.Now.ToString("yyyy-MM-dd-hhmm-ss");
-
-                driver.TakeScreenshot().SaveAsFile(System.AppDomain.CurrentDomain.BaseDirectory + "../../Resources/Screenshots/" + methodName + "-" + timestamp + ".png");
-                return methodName + "-" + timestamp + ".png";
-            }
-        }
+        
     }
 }

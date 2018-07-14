@@ -22,21 +22,17 @@ namespace Mantis_Automation.Pages
         public LoginPage(IWebDriver driverReference)
         {
             driver = driverReference;
-            PageFactory.InitElements(driver, this);
             waitComponent = Convert.ToInt16(ConfigurationManager.AppSettings["ComponentTimeout"]);
             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(waitComponent));
         }
 
         #region Web Elements
 
-        [FindsBy(How = How.Name, Using = "username")]
-        protected IWebElement UserNameField { get; set; }
+        protected IWebElement UserNameField => driver.FindElement(By.Name("username"));
 
-        [FindsBy(How = How.Name, Using = "password")]
-        protected IWebElement PasswordField { get; set; }
+        protected IWebElement PasswordField => driver.FindElement(By.Name("password"));
 
-        [FindsBy(How = How.ClassName, Using = "button")]
-        protected IWebElement LoginButton { get; set; }
+        protected IWebElement LoginButton => driver.FindElement(By.ClassName("button"));
 
 
         #endregion
@@ -45,17 +41,20 @@ namespace Mantis_Automation.Pages
 
         public void fillUsernameField(string username)
         {
+            wait.Until(WaitHelper.ElementIsVisible(UserNameField));
             UserNameField.SendKeys(username);
         }
 
         public void fillPasswordField(string password)
         {
+            wait.Until(WaitHelper.ElementIsVisible(UserNameField));
             PasswordField.SendKeys(password);
         }
 
         public void clickOnLoginButton()
         {
-            LoginButton.Click();
+            wait.Until(WaitHelper.ElementIsVisible(LoginButton));
+            //LoginButton.Click();
         }
 
         #endregion

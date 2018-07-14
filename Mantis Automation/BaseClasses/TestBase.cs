@@ -9,22 +9,25 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NunitVideoRecorder;
 
 namespace Mantis_Automation.BaseClasses
 {
-   /* public enum BrowserType
-    {
-        Chrome,
-        Firefox,
-        IE,
-        Opera
-    }
+    /* public enum BrowserType
+     {
+         Chrome,
+         Firefox,
+         IE,
+         Opera
+     }
 
-    [TestFixture(BrowserType.Chrome)]
-    [TestFixture(BrowserType.Firefox)]
-    [TestFixture(BrowserType.Opera)]
-    [TestFixture(BrowserType.IE)]
-    [Parallelizable(ParallelScope.Fixtures)]*/
+     [TestFixture(BrowserType.Chrome)]
+     [TestFixture(BrowserType.Firefox)]
+     [TestFixture(BrowserType.Opera)]
+     [TestFixture(BrowserType.IE)]
+     [Parallelizable(ParallelScope.Fixtures)]*/
+
+    [WatchDog(SaveInClass.AllTests)]
     public class TestBase
     {
 
@@ -42,11 +45,10 @@ namespace Mantis_Automation.BaseClasses
 
             if (NUnit.Framework.TestContext.CurrentContext.Result.FailCount > 0)
             {
-                string nomeArquivo = DriverFactory.TakeScreenshotOnException(driver, NUnit.Framework.TestContext.CurrentContext.Test.MethodName);
+                string nomeArquivo = TakeScreenshotsHelper.TakeScreenshotOnException(driver, NUnit.Framework.TestContext.CurrentContext.Test.MethodName);
                 NUnit.Framework.TestContext.AddTestAttachment(System.AppDomain.CurrentDomain.BaseDirectory + "../../Resources/Screenshots/" + nomeArquivo, "evidência da tela onde o erro ocorreu!");
             }
             driver.Quit();
-
         }
     }
 }
