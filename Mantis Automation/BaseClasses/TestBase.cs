@@ -1,15 +1,7 @@
 ﻿using Mantis_Automation.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NunitVideoRecorder;
 
 namespace Mantis_Automation.BaseClasses
 {
@@ -27,7 +19,7 @@ namespace Mantis_Automation.BaseClasses
      [TestFixture(BrowserType.IE)]
      [Parallelizable(ParallelScope.Fixtures)]*/
 
-    [WatchDog(SaveInClass.AllTests)]
+    //[WatchDog(SaveInClass.AllTests)]
     public class TestBase
     {
 
