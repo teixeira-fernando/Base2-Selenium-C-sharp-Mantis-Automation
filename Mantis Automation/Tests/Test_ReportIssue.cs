@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mantis_Automation.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class Test_ReportIssue : TestBase
     {
         #region Objetos de página e steps
@@ -38,7 +38,6 @@ namespace Mantis_Automation.Tests
 
         #endregion
 
-        [Parallelizable]
         [TestMethod, TestCaseSource("testReportProvider_Conjunto", new object[] { new int[] { 1 } } )]
         public void TestReport_BasicReport(ArrayList dadosTeste)
         {

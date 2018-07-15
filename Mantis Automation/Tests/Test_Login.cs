@@ -7,7 +7,8 @@ using System.Collections;
 
 namespace Mantis_Automation.Tests
 {
-    [TestClass]
+    [TestFixture]
+    [Parallelizable(ParallelScope.Fixtures)]
     public class Test_Login : TestBase
     {
 
@@ -32,7 +33,6 @@ namespace Mantis_Automation.Tests
 
         #endregion
 
-        [Parallelizable]
         [TestMethod, TestCaseSource("loginDataProvider", new object[] { 1 })]
         public void SuccessLogin(ArrayList dadosTeste)
         {
@@ -45,7 +45,6 @@ namespace Mantis_Automation.Tests
             NUnit.Framework.Assert.IsTrue(myViewSteps.myViewPage.Is_LoggedInUserLabel_Visible());
         }
 
-        [Parallelizable]
         [TestMethod, TestCaseSource("loginDataProvider_Conjunto", new object[] { new int[] { 2, 3, 4 } })]
         public void FailLogin(ArrayList dadosTeste)
         {
